@@ -1,0 +1,6 @@
+hub.tawhid.in {
+    reverse_proxy localhost:5000
+    log {
+        output file /var/log/caddy/onayathabit.log
+    }
+} 
