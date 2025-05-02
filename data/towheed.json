@@ -1,0 +1,47 @@
+{
+  "dailyTasks": [
+    {
+      "id": 1746167699903,
+      "date": "2025-05-02",
+      "type": "other",
+      "notes": "namaaz duwa qunoot"
+    }
+  ],
+  "namazTracker": [
+    {
+      "id": 1746167649857,
+      "date": "2025-05-02",
+      "fajr": true,
+      "dhuhr": true,
+      "asr": true,
+      "maghrib": true,
+      "isha": true,
+      "notes": ""
+    }
+  ],
+  "typingProgress": [
+    {
+      "id": 1746167647685,
+      "date": "2025-05-02",
+      "speed": "10",
+      "notes": "check with towheed"
+    }
+  ],
+  "dsaProgress": [
+    {
+      "id": 1746167640704,
+      "date": "2025-05-02",
+      "problemLink": "https:///google.com",
+      "notes": "check with towheed"
+    }
+  ],
+  "youtubeVideos": [
+    {
+      "id": 1746167630576,
+      "date": "2025-05-02",
+      "title": "not sure yet",
+      "link": "https://youtube.com",
+      "notes": "check with towheed"
+    }
+  ]
+}
