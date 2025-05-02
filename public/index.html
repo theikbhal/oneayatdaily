@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Quran Ayat Tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin-top: 2rem;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem;
+            border-radius: 15px 15px 0 0;
+        }
+        .entry-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .time-suggestion {
+            color: #6c757d;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card mb-4">
+            <div class="header">
+                <h2 class="text-center mb-0">Daily Quran Ayat Tracker</h2>
+            </div>
+            <div class="card-body">
+                <form id="ayatForm">
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="date" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ayat" class="form-label">Ayat</label>
+                        <textarea class="form-control" id="ayat" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="timeSpent" class="form-label">Time Spent (minutes)</label>
+                        <input type="number" class="form-control" id="timeSpent" min="1" required>
+                        <div class="time-suggestion mt-1">Suggested: 60 minutes per ayat</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Notes</label>
+                        <textarea class="form-control" id="notes" rows="2"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Save Entry</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="header">
+                <h3 class="text-center mb-0">Previous Entries</h3>
+            </div>
+            <div class="card-body">
+                <div id="entriesList" class="entry-list">
+                    <!-- Entries will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set default date to today
+        document.getElementById('date').valueAsDate = new Date();
+
+        // Load entries
+        async function loadEntries() {
+            const response = await fetch('/api/entries');
+            const entries = await response.json();
+            const entriesList = document.getElementById('entriesList');
+            entriesList.innerHTML = entries.map(entry => `
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <h5 class="card-title">${new Date(entry.date).toLocaleDateString()}</h5>
+                        <p class="card-text"><strong>Ayat:</strong> ${entry.ayat}</p>
+                        <p class="card-text"><strong>Time Spent:</strong> ${entry.timeSpent} minutes</p>
+                        ${entry.notes ? `<p class="card-text"><strong>Notes:</strong> ${entry.notes}</p>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Handle form submission
+        document.getElementById('ayatForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const entry = {
+                date: document.getElementById('date').value,
+                ayat: document.getElementById('ayat').value,
+                timeSpent: parseInt(document.getElementById('timeSpent').value),
+                notes: document.getElementById('notes').value
+            };
+
+            await fetch('/api/entries', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(entry)
+            });
+
+            // Reset form
+            document.getElementById('ayat').value = '';
+            document.getElementById('timeSpent').value = '';
+            document.getElementById('notes').value = '';
+            document.getElementById('date').valueAsDate = new Date();
+
+            // Reload entries
+            loadEntries();
+        });
+
+        // Initial load
+        loadEntries();
+    </script>
+</body>
+</html> 
